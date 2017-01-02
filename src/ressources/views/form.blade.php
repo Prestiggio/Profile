@@ -47,6 +47,8 @@
 	<label class="control-label" for="profile_lastname">nom</label>
 	<input type="text" class="form-control" ng-model="profile.lastname" name="profile_lastname" id="profile_lastname" required>
 </div>
+
+@if(!auth()->user()->isSociete())
 			
 <div class="form-group">
 	<label class="control-label" for="profile_adresse_raw">adresse</label>
@@ -67,6 +69,8 @@
 	<label class="control-label" for="profile_adresse_ville_country_nom">pays</label>
 	<input type="text" class="form-control" ng-model="profile.adresse.ville.country.nom" name="profile_adresse_ville_country_nom" id="profile_adresse_ville_country_nom" required>
 </div>
+
+@endif
 
 <div class="form-group">
 			<button type="submit" class="btn btn-default"

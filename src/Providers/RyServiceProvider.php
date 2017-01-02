@@ -4,6 +4,10 @@ namespace Ry\Profile\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
+use App\User;
+use Ry\Profile\Models\Emailconfirmation;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Mail;
 
 class RyServiceProvider extends ServiceProvider
 {
@@ -43,7 +47,24 @@ class RyServiceProvider extends ServiceProvider
     	//$kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
     	//$kernel->pushMiddleware('Ry\Facebook\Http\Middleware\Facebook');
     	
-    	
+    	User::saved(function($user){
+    		$confirmation = Emailconfirmation::where("email", "LIKE", $user->email)->first();
+    		if(!$confirmation) {
+    			Model::unguard();
+    			
+    			$user->confirmation()->create([
+    				"email" => $user->email,
+    				"hash" => str_random(),
+    				"valide" => false
+    			]);
+    			
+    			Model::reguard();
+    			
+    			Mail::queue('ryprofile::emails.confirm', ["row" => $user], function($message) use ($user){
+    				$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
+    			});
+    		}
+    	});
     }
 
     /**
