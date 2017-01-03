@@ -24,6 +24,9 @@ class ProfileController extends Controller
 		auth()->user()->profile->adresse_id = $address->id;
 		auth()->user()->profile->save();
 		
+		auth()->user()->name = $ar["firstname"] . " " . $ar["lastname"];
+		auth()->user()->save();
+		
 		return auth()->user()->profile;
 	}
 	
