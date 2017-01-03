@@ -24,7 +24,8 @@ class EmailController extends Controller
 	
 	public function getResend() {
 		$user = auth()->user();
-		Mail::queue('ryprofile::emails.confirm', ["row" => $user], function($message) use ($user){
+		$confirmation = $user->confirmation;
+		Mail::queue('ryprofile::emails.confirm', ["row" => $user, "confirmation" => $confirmation], function($message) use ($user){
 			$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
 		});
 		return redirect()->back();

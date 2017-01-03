@@ -52,7 +52,7 @@ class RyServiceProvider extends ServiceProvider
     		if(!$confirmation) {
     			Model::unguard();
     			
-    			$user->confirmation()->create([
+    			$confirmation = $user->confirmation()->create([
     				"email" => $user->email,
     				"hash" => str_random(),
     				"valide" => false
@@ -60,7 +60,7 @@ class RyServiceProvider extends ServiceProvider
     			
     			Model::reguard();
     			
-    			Mail::queue('ryprofile::emails.confirm', ["row" => $user], function($message) use ($user){
+    			Mail::queue('ryprofile::emails.confirm', ["row" => $user, "confirmation" => $confirmation], function($message) use ($user){
     				$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
     			});
     		}
