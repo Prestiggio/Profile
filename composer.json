@@ -14,8 +14,8 @@
         }
     },
     "require": {
-    	"ry/medias":"dev-master",
-        "ry/geo":"dev-master"
+    	"ry/medias":"dev-prefixed",
+        "ry/geo":"dev-prefixed"
     },
     "repositories": [
 	    {
