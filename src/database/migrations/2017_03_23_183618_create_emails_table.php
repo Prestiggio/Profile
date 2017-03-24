@@ -12,7 +12,7 @@ class CreateEmailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('emails', function (Blueprint $table) {
+        Schema::create('ry_profile_emails', function (Blueprint $table) {
             $table->increments('id');
             $table->char("address");
             $table->timestamps();
@@ -26,6 +26,6 @@ class CreateEmailsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('emails');
+        Schema::drop('ry_profile_emails');
     }
 }

@@ -12,7 +12,7 @@ class CreateChatsTable extends Migration
      */
     public function up()
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('ry_profile_chats', function (Blueprint $table) {
             $table->increments('id');
             $table->char("operateur", 25);
             $table->char("username");
@@ -27,6 +27,6 @@ class CreateChatsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('chats');
+        Schema::drop('ry_profile_chats');
     }
 }

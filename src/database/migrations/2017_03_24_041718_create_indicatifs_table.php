@@ -12,7 +12,7 @@ class CreateIndicatifsTable extends Migration
      */
     public function up()
     {
-        Schema::create('indicatifs', function (Blueprint $table) {
+        Schema::create('ry_profile_indicatifs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("country_id", false, true);
             $table->integer("code", false, true);
@@ -28,6 +28,6 @@ class CreateIndicatifsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('indicatifs');
+        Schema::drop('ry_profile_indicatifs');
     }
 }

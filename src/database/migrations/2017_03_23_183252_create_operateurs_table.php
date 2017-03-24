@@ -12,7 +12,7 @@ class CreateOperateursTable extends Migration
      */
     public function up()
     {
-        Schema::create('operateurs', function (Blueprint $table) {
+        Schema::create('ry_profile_operateurs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("country_id", false, true);
             $table->integer("code", false, true);
@@ -28,6 +28,6 @@ class CreateOperateursTable extends Migration
      */
     public function down()
     {
-        Schema::drop('operateurs');
+        Schema::drop('ry_profile_operateurs');
     }
 }

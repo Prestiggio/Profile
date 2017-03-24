@@ -8,4 +8,6 @@ use Ry\Profile\Models\Traits\ContactTrait;
 class Email extends Model
 {
     use ContactTrait;
+    
+    protected $table = "ry_profile_emails";
 }

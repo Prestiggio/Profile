@@ -12,7 +12,7 @@ class CreatePhonesTable extends Migration
      */
     public function up()
     {
-        Schema::create('phones', function (Blueprint $table) {
+        Schema::create('ry_profile_phones', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("indicatif_id", false, true);
             $table->integer("operateur_id", false, true);
@@ -28,6 +28,6 @@ class CreatePhonesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('phones');
+        Schema::drop('ry_profile_phones');
     }
 }

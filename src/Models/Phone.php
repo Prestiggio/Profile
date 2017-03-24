@@ -8,4 +8,6 @@ use Ry\Profile\Models\Traits\ContactTrait;
 class Phone extends Model
 {
     use ContactTrait;
+    
+    protected $table = "ry_profile_phones";
 }

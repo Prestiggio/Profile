@@ -12,7 +12,7 @@ class CreateContactsTable extends Migration
      */
     public function up()
     {
-        Schema::create('contacts', function (Blueprint $table) {
+        Schema::create('ry_profile_contacts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("user_id", false, true);
             $table->char("type")->nullable(); //domicile, bureau...
@@ -29,6 +29,6 @@ class CreateContactsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('contacts');
+        Schema::drop('ry_profile_contacts');
     }
 }
