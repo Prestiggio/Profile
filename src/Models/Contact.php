@@ -8,7 +8,24 @@ class Contact extends Model
 {
 	protected $table = "ry_profile_contacts";
 	
-    public function contact() {
+	protected $visible = ["id", "type", "ry_profile_contact_type", "coord"];
+	
+	protected $appends = ["coord"];
+	
+    public function ry_profile_contact() {
 		return $this->morphTo();
+	}
+	
+	public function getCoordAttribute() {
+		if($this->ry_profile_contact_type == Chat::class)
+			return $this->ry_profile_contact->username;
+		
+		if($this->ry_profile_contact_type == Email::class)
+			return $this->ry_profile_contact->address;
+		
+		if ($this->ry_profile_contact_type == Phone::class)
+			return $this->ry_profile_contact->raw;
+		
+		return "undefined";
 	}
 }

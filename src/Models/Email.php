@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Ry\Profile\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Ry\Profile\Models\Traits\ContactTrait;

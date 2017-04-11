@@ -16,8 +16,8 @@ class CreateContactsTable extends Migration
             $table->increments('id');
             $table->integer("user_id", false, true);
             $table->char("type")->nullable(); //domicile, bureau...
-            $table->char("contact_type");
-            $table->integer("contact_id", false, true);
+            $table->char("ry_profile_contact_type");
+            $table->integer("ry_profile_contact_id", false, true);
             $table->timestamps();
         });
     }
