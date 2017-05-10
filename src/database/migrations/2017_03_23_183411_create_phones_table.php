@@ -16,7 +16,7 @@ class CreatePhonesTable extends Migration
             $table->increments('id');
             $table->integer("indicatif_id", false, true);
             $table->integer("operateur_id", false, true);
-            $table->char("raw", 20);
+            $table->char("raw", 100);
             $table->timestamps();
         });
     }
