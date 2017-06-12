@@ -15,8 +15,8 @@ class CreateIndicatifsTable extends Migration
         Schema::create('ry_profile_indicatifs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("country_id", false, true);
-            $table->integer("code", false, true);
-            $table->char("format", 20);
+            $table->char("code", 5);
+            $table->char("format", 100);
             $table->timestamps();
         });
     }
