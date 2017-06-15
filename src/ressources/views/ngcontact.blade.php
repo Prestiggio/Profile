@@ -26,7 +26,7 @@
 			<input type="text" name="immobilier_owner_contact_coord" ng-model="contact.coord">
 		</md-input-container>
 		<md-input-container>
-			<md-button class="md-icon-button" ng-click="rediger('contact.coord['+$index+']')" aria-label="Assign"><md-icon md-font-icon="fa fa-send"></md-icon></md-button>
+			<md-button class="md-icon-button" ng-click="$root.ask('contact')" aria-label="Assign"><md-icon md-font-icon="fa fa-send"></md-icon></md-button>
 			<md-button class="md-icon-button" ng-if="(data|filter:{deleted:'!true'}).length>1" ng-click="contact.deleted=true" aria-label="remove"><md-icon md-font-icon="fa fa-minus-circle"></md-icon></md-button>
 		</md-input-container>
 	</div>
