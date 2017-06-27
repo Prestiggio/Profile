@@ -17,14 +17,16 @@ class Contact extends Model
 	}
 	
 	public function getCoordAttribute() {
-		if($this->ry_profile_contact_type == Chat::class)
-			return $this->ry_profile_contact->username;
-		
-		if($this->ry_profile_contact_type == Email::class)
-			return $this->ry_profile_contact->address;
-		
-		if ($this->ry_profile_contact_type == Phone::class)
-			return $this->ry_profile_contact->raw;
+		if($this->ry_profile_contact) {
+			if($this->ry_profile_contact_type == Chat::class)
+				return $this->ry_profile_contact->username;
+			
+			if($this->ry_profile_contact_type == Email::class)
+				return $this->ry_profile_contact->address;
+			
+			if ($this->ry_profile_contact_type == Phone::class)
+				return $this->ry_profile_contact->raw;
+		}
 		
 		return "undefined";
 	}
