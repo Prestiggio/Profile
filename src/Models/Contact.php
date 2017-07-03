@@ -8,9 +8,9 @@ class Contact extends Model
 {
 	protected $table = "ry_profile_contacts";
 	
-	protected $visible = ["id", "type", "ry_profile_contact_type", "coord"];
+	protected $visible = ["id", "type", "contact_type", "coord"];
 	
-	protected $appends = ["coord"];
+	protected $appends = ["coord", "contact_type"];
 	
     public function ry_profile_contact() {
 		return $this->morphTo();
@@ -33,5 +33,18 @@ class Contact extends Model
 	
 	public function owner() {
 		return $this->belongsTo("App\User", "user_id");
+	}
+	
+	public function getContactTypeAttribute(){
+		if($this->ry_profile_contact_type == Chat::class)
+			return "chat";
+			
+		if($this->ry_profile_contact_type == Email::class)
+			return "email";
+			
+		if ($this->ry_profile_contact_type == Phone::class)
+			return "phone";
+		
+		return "";
 	}
 }

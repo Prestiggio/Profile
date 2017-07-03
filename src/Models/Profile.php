@@ -11,7 +11,7 @@ class Profile extends Model {
 	
 	protected $with = ["adresse"];
 	
-	protected $fillable = ["firstname", "lastname", "official", "languages"];
+	protected $fillable = ["firstname", "lastname", "official", "languages", "adresse_id"];
 	
 	public function owner() {
 		return $this->belongsTo("App\User", "user_id");
