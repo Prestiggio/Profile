@@ -1,5 +1,5 @@
 <h4>Contacts</h4>
-<ng-form ng-repeat="contact in data" ng-if="!contact.deleted">
+<ng-form name="frm_profile_contacts" ng-repeat="contact in data" ng-if="!contact.deleted">
 	<div layout="row">
 		<md-input-container>
 			<md-button ng-click="contact.coord=$root.selectedText" aria-label="Assign" class="md-icon-button"><md-icon md-font-icon="fa fa-long-arrow-right"></md-icon></md-button>
@@ -23,7 +23,10 @@
 		</md-input-container>
 		<md-input-container>
 			<label>Coordonnées</label>
-			<input type="text" name="immobilier_owner_contact_coord" ng-model="contact.coord">
+			<input type="text" name="immobilier_owner_contact_coord" ng-model="contact.coord" required>
+			<div ng-messages="frm_profile_contacts.immobilier_owner_contact_coord.$error">
+		 		<div ng-message="required">Ce champ est absolument requis</div>
+		 	</div>
 		</md-input-container>
 		<md-input-container>
 			<md-button class="md-icon-button" ng-click="$root.ask('contact')" aria-label="Assign"><md-icon md-font-icon="fa fa-send"></md-icon></md-button>
