@@ -60,17 +60,20 @@ class AdminController extends Controller
 				else {
 					$phone = Contact::where("id", "=", $contact["id"])->first()->ry_profile_contact;
 				}
-				$phone->indicatif_id = $indic->id;
-				$phone->operateur_id = $op->id;
-				$phone->raw = $raw;
-				$phone->save ();
-
-				if(!isset($contact["id"])) {
-					$joinable->contacts ()->create ( [
-							"type" => "bureau",
-							"ry_profile_contact_type" => Phone::class,
-							"ry_profile_contact_id" => $phone->id
-					] );
+				
+				if(!Phone::where("indicatif_id", "=", $indic->id)->where("operateur_id", "=", $op->id)->where("raw", "=", $raw)->exists()) {
+					$phone->indicatif_id = $indic->id;
+					$phone->operateur_id = $op->id;
+					$phone->raw = $raw;
+					$phone->save ();
+					
+					if(!isset($contact["id"])) {
+						$joinable->contacts ()->create ( [
+								"type" => "bureau",
+								"ry_profile_contact_type" => Phone::class,
+								"ry_profile_contact_id" => $phone->id
+						] );
+					}
 				}
 			}
 					
