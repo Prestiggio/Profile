@@ -5,30 +5,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Ry\Geo\Models\Adresse;
 use Illuminate\Database\Eloquent\Model;
-use Mail;
+use Mail, Auth;
 class ProfileController extends Controller
 {
 	public function __construct() {
+		$this->middleware("web");
 		$this->middleware("auth");
 	}
 	
 	public function getEdit() {
 		return view("profile.form", ["row" => auth()->user()->profile]);
-	}
-	
-	public function postEdit(Request $request) {
-		$ar = $request->all();
-		
-		$address = Adresse::firstOrCreateFromBulk($ar["adresse"]);
-		auth()->user()->profile->firstname = $ar["firstname"];
-		auth()->user()->profile->lastname = $ar["lastname"];
-		auth()->user()->profile->adresse_id = $address->id;
-		auth()->user()->profile->save();
-		
-		auth()->user()->name = $ar["firstname"] . " " . $ar["lastname"];
-		auth()->user()->save();
-		
-		return auth()->user()->profile;
 	}
 	
 	public function getEditPass() {
@@ -57,5 +43,43 @@ class ProfileController extends Controller
 			$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
 		});
 		return redirect()->back();
+	}
+	
+	public function postEdit(Request $request) {
+		$ar = $request->all();
+	
+		$user = Auth::user();
+	
+		Model::unguard();
+		
+		if(isset($ar["profile"]["adresse"]))
+			$adresse = Adresse::firstOrCreateFromBulk($ar["profile"]["adresse"]);
+		
+		$data = [
+				"pseudo" => isset($ar["profile"]["pseudo"]) ? $ar["profile"]["pseudo"] : null,
+				"firstname" => isset($ar["profile"]["firstname"]) ? $ar["profile"]["firstname"] : null,
+				"middlename" => isset($ar["profile"]["middlename"]) ? $ar["profile"]["middlename"] : null,
+				"lastname" => isset($ar["profile"]["lastname"]) ? $ar["profile"]["lastname"] : null,
+				"official" => isset($ar["profile"]["official"]) ? $ar["profile"]["official"] : null,
+				"gender" => isset($ar["profile"]["gender"]) ? $ar["profile"]["gender"] : null,
+				"relationship" => isset($ar["profile"]["relationship"]) ? $ar["profile"]["relationship"] : null,
+				"about" => isset($ar["profile"]["about"]) ? $ar["profile"]["about"] : null,
+				"birthday" => isset($ar["profile"]["birthday"]) ? $ar["profile"]["birthday"] : null,
+				"adresse_id" => isset($adresse) ? $adresse->id : 0,
+				"languages" => isset($ar["profile"]["languages"]) ? $ar["profile"]["languages"] : null
+		];
+		
+		if(!$user->profile)
+			$user->profile()->create($data);
+		else {
+			$user->profile()->update($data);
+		}
+		
+		if(isset($ar["contacts"]))
+			app("\Ry\Profile\Http\Controllers\AdminController")->putContacts($user, $ar["contacts"]);
+	
+		Model::reguard();
+		
+		return $user->profile;
 	}
 }

@@ -14,4 +14,8 @@ trait JoinableTrait
 		}
 		return implode("<br/>", $s);
 	}
+	
+	public function isJoinable() {
+		return $this->contacts->count() > 0;
+	}
 }

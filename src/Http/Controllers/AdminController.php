@@ -17,6 +17,8 @@ class AdminController extends Controller
 	}
 	
 	public function putContacts(&$joinable, $ar) {
+		Model::unguard();
+		
 		foreach ( $ar as $contact ) {
 			if(isset($contact["id"]) && isset($contact["deleted"])) {
 				$joinable->contacts()->where("id", "=", $contact["id"])->delete();
@@ -33,6 +35,7 @@ class AdminController extends Controller
 						
 			if ($contact ["contact_type"] == "phone") {
 				$raw = preg_replace ( "/[^\d]+/i", "", $contact ["coord"] );
+				$raw = preg_replace("/^0*261/i", "0", $raw);
 				$indicatif = substr ( $raw, 0, - 9 );
 				$operateur = substr ( $raw, - 9, - 7 );
 				if ($indicatif == "0")
@@ -91,5 +94,7 @@ class AdminController extends Controller
 				] );
 			}
 		}
+		
+		Model::reguard();
 	}
 }

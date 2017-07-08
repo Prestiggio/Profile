@@ -2,6 +2,9 @@
 <ng-form name="frm_profile_contacts" ng-repeat="contact in data" ng-if="!contact.deleted">
 	<div layout="row">
 		<md-input-container>
+			<md-button ng-click="contact.coord=$root.selectedText" aria-label="Assign" class="md-icon-button"><md-icon md-font-icon="fa fa-long-arrow-right"></md-icon></md-button>
+		</md-input-container>
+		<md-input-container>
 			<label>Type</label>
 			<md-select name="immobilier_owner_contact_contact_type" ng-model="contact.contact_type" aria-label="Type">
 				<md-option value="email">email</md-option>
@@ -26,6 +29,7 @@
 		 	</div>
 		</md-input-container>
 		<md-input-container>
+			<md-button class="md-icon-button" ng-click="$root.ask('contact')" aria-label="Assign"><md-icon md-font-icon="fa fa-send"></md-icon></md-button>
 			<md-button class="md-icon-button" ng-if="(data|filter:{deleted:'!true'}).length>1" ng-click="contact.deleted=true" aria-label="remove"><md-icon md-font-icon="fa fa-minus-circle"></md-icon></md-button>
 		</md-input-container>
 	</div>
