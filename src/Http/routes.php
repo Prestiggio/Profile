@@ -6,4 +6,6 @@ Route::get("ry/profile/admincontact", function(){
 	return view("ryprofile::admincontact");
 });
 Route::controller("/profile/email", "EmailController");
-Route::controller("/profile", "ProfileController");
+Route::group(["middleware" => ["web", "auth"]], function(){
+	Route::controller("/profile", "ProfileController");
+});

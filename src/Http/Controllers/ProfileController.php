@@ -82,4 +82,12 @@ class ProfileController extends Controller
 		
 		return $user->profile;
 	}
+	
+	public function postNotification(Request $request) {
+		Model::unguard();
+		Notification::create($request->only([
+				"user_id", "presentation", "priority"
+		]));
+		Model::reguard();
+	}
 }
