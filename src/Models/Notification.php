@@ -12,4 +12,8 @@ class Notification extends Model
     protected $table = "ry_profile_notifications";
     
     protected $dates = ['deleted_at'];
+    
+    public function object() {
+    	return  $this->morphTo();
+    }
 }

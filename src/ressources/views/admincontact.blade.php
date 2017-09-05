@@ -34,4 +34,4 @@
 		</md-input-container>
 	</div>
 </ng-form>
-<md-button ng-click="data.push({type : 'bureau',contact_type : 'phone'})" aria-label="add" class="md-raised md-accent"><md-icon md-font-icon="fa fa-plus-circle"></md-icon> contact</md-button>
+<md-button ng-click="data.push({type : 'bureau',contact_type : 'phone'})" aria-label="add" class="md-raised"><md-icon md-font-icon="fa fa-plus-circle"></md-icon> contact</md-button>
