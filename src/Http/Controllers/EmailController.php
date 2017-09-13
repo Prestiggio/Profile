@@ -12,7 +12,7 @@ class EmailController extends Controller
 		if($confirmation) {
 			$confirmation->valide = true;
 			$confirmation->save();
-			return view("profile.emails.confirmed");
+			return view("ryprofile::emails.confirmed");
 		}
 		return redirect("/home");
 	}

@@ -23,7 +23,7 @@ trait Emailconfirmable
 		Model::reguard();
 		 
 		Mail::queue('ryprofile::emails.confirm', ["row" => $user, "confirmation" => $user->confirmation], function($message) use ($user){
-			$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
+			$message->to($user->email, $user->name)->subject('Bienvenue sur '.env("APP_URL").'!');
 		});
 		
 		return false;
