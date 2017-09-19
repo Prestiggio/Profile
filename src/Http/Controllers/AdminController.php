@@ -34,21 +34,37 @@ class AdminController extends Controller
 			}
 						
 			if ($contact ["contact_type"] == "phone") {
+				if(!isset($contact ["coord"]))
+					continue;
+				
 				$raw = preg_replace ( "/[^\d]+/i", "", $contact ["coord"] );
-				$raw = preg_replace("/^0*261/i", "0", $raw);
-				$indicatif = substr ( $raw, 0, - 9 );
-				$operateur = substr ( $raw, - 9, - 7 );
-				if ($indicatif == "0")
-					$indicatif = "261";
-
-				$indic = Indicatif::where ( "code", "=", $indicatif )->first ();
-				if (! $indic) {
-					$indic = new Indicatif ();
-					$indic->country_id = 1;
-					$indic->code = $indicatif;
-					$indic->save ();
+				if(isset($contact ["contact"]) && isset($contact ["contact"]["indicatif"])) {
+					$indic = Indicatif::where( "id", "=", $contact ["contact"]["indicatif"]["id"] )->first ();
+					if (! $indic) {
+						continue;
+					}
 				}
-
+				else {
+					$raw = preg_replace("/^0*261/i", "0", $raw);
+					if(strlen($raw)<10) {
+						continue;
+					}
+					
+					$indicatif = substr ( $raw, 0, - 9 );
+					if ($indicatif == "0")
+						$indicatif = "261";
+					
+					$indic = Indicatif::where ( "code", "=", $indicatif )->first ();
+					if (! $indic) {
+						$indic = new Indicatif ();
+						$indic->country_id = 1;
+						$indic->code = $indicatif;
+						$indic->save ();
+					}
+				}
+				
+				$operateur = substr ( $raw, - 9, - 7 );
+				
 				$op = Operateur::where ( "code", "=", $operateur )->first ();
 				if (! $op) {
 					$op = new Operateur ();
@@ -81,6 +97,9 @@ class AdminController extends Controller
 			}
 					
 			if ($contact ["contact_type"] == "email") {
+				if(!isset($contact ["coord"]))
+					continue;
+				
 				$email = Email::where ( "address", "=", $contact ["coord"] )->first ();
 				if (! $email) {
 					$email = new Email ();
