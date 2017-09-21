@@ -31,8 +31,8 @@ class Contact extends Model
 		return "undefined";
 	}
 	
-	public function owner() {
-		return $this->belongsTo("App\User", "user_id");
+	public function joinable() {
+		return $this->morphTo();
 	}
 	
 	public function getContactTypeAttribute(){

@@ -4,7 +4,7 @@ namespace Ry\Profile\Models\Traits;
 trait JoinableTrait
 {
 	public function contacts() {
-		return $this->hasMany("Ry\Profile\Models\Contact", "user_id");
+		return $this->morphMany("Ry\Profile\Models\Contact", "joinable");
 	}
 	
 	public function getCompleteContactsAttribute() {

@@ -50,22 +50,7 @@ class RyServiceProvider extends ServiceProvider
     	$use_trait = array_has(class_uses(User::class), "Ry\Profile\Models\Traits\Emailconfirmable");
     	if($use_trait) {
     		User::saved(function($user){
-    			$confirmation = Emailconfirmation::where("email", "LIKE", $user->email)->first();
-    			if(!$confirmation) {
-    				Model::unguard();
-    				 
-    				$confirmation = $user->confirmation()->create([
-    						"email" => $user->email,
-    						"hash" => str_random(),
-    						"valide" => false
-    				]);
-    				 
-    				Model::reguard();
-    				 
-    				Mail::queue('ryprofile::emails.confirm', ["row" => $user, "confirmation" => $confirmation], function($message) use ($user){
-    					$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
-    				});
-    			}
+    			$user->isEmailConfirmed();
     		});
     	}
     }
