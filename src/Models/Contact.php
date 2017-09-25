@@ -16,6 +16,10 @@ class Contact extends Model
 		return $this->morphTo();
 	}
 	
+	public function schedules() {
+		return $this->hasMany("Ry\Profile\Models\ContactSchedule", "contact_id");
+	}
+	
 	public function getCoordAttribute() {
 		if($this->ry_profile_contact) {
 			if($this->ry_profile_contact_type == Chat::class)

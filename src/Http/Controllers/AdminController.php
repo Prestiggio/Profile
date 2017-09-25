@@ -38,13 +38,13 @@ class AdminController extends Controller
 					continue;
 				
 				$raw = preg_replace ( "/[^\d]+/i", "", $contact ["coord"] );
-				if(isset($contact ["contact"]) && isset($contact ["contact"]["indicatif"])) {
+				if(isset($contact ["contact"]["indicatif"]["id"])) {
 					$indic = Indicatif::where( "id", "=", $contact ["contact"]["indicatif"]["id"] )->first ();
 					if (! $indic) {
 						continue;
 					}
 				}
-				else {
+				else {					
 					$raw = preg_replace("/^0*261/i", "0", $raw);
 					if(strlen($raw)<10) {
 						continue;
@@ -57,7 +57,7 @@ class AdminController extends Controller
 					$indic = Indicatif::where ( "code", "=", $indicatif )->first ();
 					if (! $indic) {
 						$indic = new Indicatif ();
-						$indic->country_id = 1;
+						$indic->country_id = (isset($contact ["contact"]["indicatif"]["country"]["id"])) ? $contact ["contact"]["indicatif"]["country"]["id"] : 1;
 						$indic->code = $indicatif;
 						$indic->save ();
 					}
@@ -68,7 +68,7 @@ class AdminController extends Controller
 				$op = Operateur::where ( "code", "=", $operateur )->first ();
 				if (! $op) {
 					$op = new Operateur ();
-					$op->country_id = 1;
+					$op->country_id = (isset($contact ["contact"]["indicatif"]["country"]["id"])) ? $contact ["contact"]["indicatif"]["country"]["id"] : 1;
 					$op->code = $operateur;
 					$op->save ();
 				}
