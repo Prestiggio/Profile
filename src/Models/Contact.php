@@ -8,9 +8,9 @@ class Contact extends Model
 {
 	protected $table = "ry_profile_contacts";
 	
-	protected $visible = ["id", "type", "contact_type", "coord"];
+	protected $visible = ["id", "type", "contact_type", "coord", "contact"];
 	
-	protected $appends = ["coord", "contact_type"];
+	protected $appends = ["coord", "contact_type", "contact"];
 	
     public function ry_profile_contact() {
 		return $this->morphTo();
@@ -50,5 +50,9 @@ class Contact extends Model
 			return "phone";
 		
 		return "";
+	}
+	
+	public function getContactAttribute() {
+		return $this->ry_profile_contact;
 	}
 }

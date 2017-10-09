@@ -8,6 +8,8 @@ class Indicatif extends Model
 {
     protected $table = "ry_profile_indicatifs";
     
+    protected $visible = ["id", "country", "code", "label"];
+    
     protected $appends = ["label"];
     
     public function getLabelAttribute() {
