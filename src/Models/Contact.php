@@ -16,8 +16,8 @@ class Contact extends Model
 		return $this->morphTo();
 	}
 	
-	public function schedules() {
-		return $this->hasMany("Ry\Profile\Models\ContactSchedule", "contact_id");
+	public function schedule() {
+		return $this->hasOne("Ry\Profile\Models\ContactSchedule", "contact_id");
 	}
 	
 	public function getCoordAttribute() {
