@@ -4,7 +4,7 @@ namespace Ry\Profile\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session, Mail;
-use Ry\Profile\Models\EmailConfirmation;
+use Ry\Profile\Models\Emailconfirmation;
 use Illuminate\Database\Eloquent\Model;
 
 class PublicController extends Controller
@@ -16,7 +16,7 @@ class PublicController extends Controller
 	public function verify($email, $session=null) {
 		Model::unguard();
 		
-		$confirmation = EmailConfirmation::create([
+		$confirmation = Emailconfirmation::create([
 				"email" => $email,
 				"hash" => str_random(),
 				"valide" => false,
