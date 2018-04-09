@@ -26,6 +26,9 @@ class AdminController extends Controller
 			}
 					
 			if(!isset($contact ["contact_type"])) {
+				if(!isset($contact ["ry_profile_contact_type"]))
+					continue;
+				
 				if($contact ["ry_profile_contact_type"]==Phone::class)
 					$contact ["contact_type"] = "phone";
 
@@ -106,11 +109,15 @@ class AdminController extends Controller
 					$email->address = $contact ["coord"];
 					$email->save ();
 				}
-				$joinable->contacts ()->create ( [
+				
+				if(!$joinable->contacts ()->where("ry_profile_contact_type", "LIKE", "%Email%")
+						->where("ry_profile_contact_id", "=", $email->id)->exists()) {
+					$joinable->contacts ()->create ( [
 						"type" => "bureau",
 						"ry_profile_contact_type" => Email::class,
 						"ry_profile_contact_id" => $email->id
-				] );
+					] );
+				}
 			}
 		}
 		
