@@ -52,7 +52,7 @@ class RyServiceProvider extends ServiceProvider
     		User::saved(function($user){
     			$user->isEmailConfirmed();
     		});
-    	}
+		}
     }
 
     /**
