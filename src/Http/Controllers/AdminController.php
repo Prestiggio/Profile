@@ -17,11 +17,16 @@ class AdminController extends Controller
 	}
 	
 	public function putContacts(&$joinable, $ar) {
-		Model::unguard();
-		
 		foreach ( $ar as $contact ) {
-			if(isset($contact["id"]) && isset($contact["deleted"])) {
-				$joinable->contacts()->where("id", "=", $contact["id"])->delete();
+			$join_id = false;
+			if(isset($contact["id"]) && $contact["id"]>0)
+				$join_id = $contact["id"];
+
+			if($join_id && isset($contact["coord"]) && strlen($contact["coord"])==0)
+				$contact["deleted"] = true;
+
+			if($join_id && isset($contact["deleted"])) {
+				$joinable->contacts()->where("id", "=", $join_id)->delete();
 				continue;
 			}
 					
@@ -35,12 +40,17 @@ class AdminController extends Controller
 				if($contact ["ry_profile_contact_type"]==Email::class)
 					$contact ["contact_type"] = "email";
 			}
+
+			Contact::unguard();
 						
 			if ($contact ["contact_type"] == "phone") {
 				if(!isset($contact ["coord"]))
 					continue;
 				
 				$raw = preg_replace ( "/[^\d]+/i", "", $contact ["coord"] );
+				if(strlen($raw)<7) {
+					continue;
+				}
 				if(isset($contact ["contact"]["indicatif"]["id"])) {
 					$indic = Indicatif::where( "id", "=", $contact ["contact"]["indicatif"]["id"] )->first ();
 					if (! $indic) {
@@ -49,7 +59,7 @@ class AdminController extends Controller
 				}
 				else {					
 					$raw = preg_replace("/^0*261/i", "0", $raw);
-					if(strlen($raw)<10) {
+					if(strlen($raw)<7) {
 						continue;
 					}
 					
@@ -76,11 +86,11 @@ class AdminController extends Controller
 					$op->save ();
 				}
 
-				if(!isset($contact["id"])) {
+				if(!$join_id) {
 					$phone = new Phone();
 				}
 				else {
-					$phone = Contact::where("id", "=", $contact["id"])->first()->ry_profile_contact;
+					$phone = Contact::where("id", "=", $join_id)->first()->ry_profile_contact;
 				}
 				
 				if(!Phone::where("indicatif_id", "=", $indic->id)->where("operateur_id", "=", $op->id)->where("raw", "=", $raw)->exists()) {
@@ -89,13 +99,21 @@ class AdminController extends Controller
 					$phone->raw = $raw;
 					$phone->save ();
 					
-					if(!isset($contact["id"])) {
+					if(!$join_id) {
 						$joinable->contacts ()->create ( [
 								"type" => "bureau",
 								"ry_profile_contact_type" => Phone::class,
 								"ry_profile_contact_id" => $phone->id
 						] );
 					}
+				}
+				elseif(!$join_id) {
+					$phone = Phone::where("indicatif_id", "=", $indic->id)->where("operateur_id", "=", $op->id)->where("raw", "=", $raw)->first();
+					$joinable->contacts ()->create ( [
+						"type" => "bureau",
+						"ry_profile_contact_type" => Phone::class,
+						"ry_profile_contact_id" => $phone->id
+					] );
 				}
 			}
 					
@@ -110,8 +128,24 @@ class AdminController extends Controller
 					$email->save ();
 				}
 				
-				if(!$joinable->contacts ()->where("ry_profile_contact_type", "LIKE", "%Email%")
+				if(!$joinable->contacts ()->where("ry_profile_contact_type", "LIKE", Email::class)
 						->where("ry_profile_contact_id", "=", $email->id)->exists()) {
+					if(!$join_id) {
+						$joinable->contacts ()->create ( [
+							"type" => "bureau",
+							"ry_profile_contact_type" => Email::class,
+							"ry_profile_contact_id" => $email->id
+						] );
+					}
+					else {
+						$joint = $joinable->contacts()->where("id", "=", $join_id)->first();
+						$joint->ry_profile_contact_id = $email->id;
+						$joint->save();
+					}
+				}
+				elseif(!$join_id) {
+					$email = $joinable->contacts ()->where("ry_profile_contact_type", "LIKE", "%Email%")
+					->where("ry_profile_contact_id", "=", $email->id)->first();
 					$joinable->contacts ()->create ( [
 						"type" => "bureau",
 						"ry_profile_contact_type" => Email::class,
@@ -119,8 +153,8 @@ class AdminController extends Controller
 					] );
 				}
 			}
+
+			Contact::reguard();
 		}
-		
-		Model::reguard();
 	}
 }

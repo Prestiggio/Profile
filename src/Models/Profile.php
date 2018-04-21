@@ -9,7 +9,7 @@ class Profile extends Model {
 	
 	protected $table = "ry_profile_profiles";
 	
-	protected $with = ["adresse"];
+	//protected $with = ["adresse"];
 	
 	protected $fillable = ["firstname", "lastname", "official", "languages", "adresse_id"];
 	
