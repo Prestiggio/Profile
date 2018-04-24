@@ -139,8 +139,17 @@ class AdminController extends Controller
 					}
 					else {
 						$joint = $joinable->contacts()->where("id", "=", $join_id)->first();
-						$joint->ry_profile_contact_id = $email->id;
-						$joint->save();
+						if(!$joint) {
+							$joinable->contacts ()->create ( [
+								"type" => "bureau",
+								"ry_profile_contact_type" => Email::class,
+								"ry_profile_contact_id" => $email->id
+							] );
+						}
+						else {
+							$joint->ry_profile_contact_id = $email->id;
+							$joint->save();
+						}
 					}
 				}
 				elseif(!$join_id) {
