@@ -39,6 +39,7 @@ trait Emailconfirmable
 			else {
 				Mail::queue('ryprofile::emails.confirm', ["row" => $this, "confirmation" => $this->confirmation], function($message) use ($user){
 					$message->to($user->email, $user->name)->subject('Bienvenue sur '.env("APP_URL").'!');
+					$message->from(env("contact", "manager@topmora.com"), env("SHOP", "TOPMORA SHOP"));
 				});
 			}
 		}

@@ -24,6 +24,7 @@ class PublicController extends Controller
 		Emailconfirmation::reguard();		
 		Mail::queue('ryprofile::emails.preconfirm', ["confirmation" => $confirmation], function($message) use ($email){
 			$message->to($email)->subject('Bienvenue sur '.env("APP_URL").'!');
+			$message->from(env("contact", "manager@topmora.com"), env("SHOP", "TOPMORA SHOP"));
 		});
 		return $confirmation;
 	}

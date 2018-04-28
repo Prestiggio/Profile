@@ -42,6 +42,7 @@ class ProfileController extends Controller
 		$confirmation = $user->confirmation;
 		Mail::queue('ryprofile::emails.confirm', ["row" => $user, "confirmation" => $confirmation], function($message) use ($user){
 			$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
+			$message->from(env("contact", "manager@topmora.com"), env("SHOP", "TOPMORA SHOP"));
 		});
 		return redirect()->back();
 	}
