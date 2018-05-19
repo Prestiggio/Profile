@@ -53,6 +53,8 @@ class Contact extends Model
 	}
 	
 	public function getContactAttribute() {
+		if($this->contact_type=="phone")
+			return $this->ry_profile_contact()->with("indicatif.country")->first();
 		return $this->ry_profile_contact;
 	}
 }

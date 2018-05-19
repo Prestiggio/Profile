@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Ry\Geo\Models\Adresse;
 use Illuminate\Database\Eloquent\Model;
+use Ry\Profile\Models\Profile;
 use Mail, Auth;
 class ProfileController extends Controller
 {
@@ -41,6 +42,7 @@ class ProfileController extends Controller
 		$confirmation = $user->confirmation;
 		Mail::queue('ryprofile::emails.confirm', ["row" => $user, "confirmation" => $confirmation], function($message) use ($user){
 			$message->to($user->email, $user->name)->subject('Bienvenue sur aportax!');
+			$message->from(env("contact", "manager@topmora.com"), env("SHOP", "TOPMORA SHOP"));
 		});
 		return redirect()->back();
 	}
@@ -50,7 +52,7 @@ class ProfileController extends Controller
 	
 		$user = Auth::user();
 	
-		Model::unguard();
+
 		
 		if(isset($ar["profile"]["adresse"]))
 			$adresse = Adresse::firstOrCreateFromBulk($ar["profile"]["adresse"]);
@@ -69,25 +71,24 @@ class ProfileController extends Controller
 				"languages" => isset($ar["profile"]["languages"]) ? $ar["profile"]["languages"] : null
 		];
 		
+		Profile::unguard();
 		if(!$user->profile)
 			$user->profile()->create($data);
 		else {
 			$user->profile()->update($data);
 		}
+		Profile::reguard();
 		
 		if(isset($ar["contacts"]))
-			app("\Ry\Profile\Http\Controllers\AdminController")->putContacts($user, $ar["contacts"]);
-	
-		Model::reguard();
-		
+			app("\Ry\Profile\Http\Controllers\AdminController")->putContacts($user, $ar["contacts"]);		
 		return $user->profile;
 	}
 	
 	public function postNotification(Request $request) {
-		Model::unguard();
+		Notification::unguard();
 		Notification::create($request->only([
 				"user_id", "presentation", "priority"
 		]));
-		Model::reguard();
+		Notification::reguard();
 	}
 }

@@ -13,8 +13,6 @@ trait Emailconfirmable
 		if($this->confirmation)
 			return $this->confirmation->id > 0 && $this->confirmation->valide;
 		
-		Model::unguard();
-		
 		$_confirmation = Emailconfirmation::where("email", "=", $this->email);
 		if($_confirmation->exists()) {
 			$confirmation = $_confirmation->first();
@@ -24,11 +22,13 @@ trait Emailconfirmable
 			}
 		}
 		else {
+			Emailconfirmation::unguard();
 			$this->confirmation()->create([
 					"email" => $this->email,
 					"hash" => str_random(),
 					"valide" => false
 			]);
+			Emailconfirmation::reguard();
 			$this->load("confirmation");
 			
 			$user = $this;
@@ -39,11 +39,10 @@ trait Emailconfirmable
 			else {
 				Mail::queue('ryprofile::emails.confirm', ["row" => $this, "confirmation" => $this->confirmation], function($message) use ($user){
 					$message->to($user->email, $user->name)->subject('Bienvenue sur '.env("APP_URL").'!');
+					$message->from(env("contact", "manager@topmora.com"), env("SHOP", "TOPMORA SHOP"));
 				});
 			}
 		}
-		
-		Model::reguard();
 		
 		return false;
 	}
