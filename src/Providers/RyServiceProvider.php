@@ -18,7 +18,6 @@ class RyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-    	parent::boot();
     	/*
     	$this->publishes([    			
     			__DIR__.'/../config/ryprofile.php' => config_path('ryprofile.php')
@@ -63,6 +62,7 @@ class RyServiceProvider extends ServiceProvider
     public function register()
     {
     	$this->app->register("Ry\Geo\Providers\RyServiceProvider");
+    	$this->app->register("Ry\Medias\Providers\RyServiceProvider");
     }
     public function map()
     {    	
