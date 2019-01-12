@@ -72,6 +72,7 @@ class AdminController extends Controller
 						$indic = new Indicatif ();
 						$indic->country_id = (isset($contact ["contact"]["indicatif"]["country"]["id"])) ? $contact ["contact"]["indicatif"]["country"]["id"] : 1;
 						$indic->code = $indicatif;
+						$indic->format = "\d{10}";
 						$indic->save ();
 					}
 				}
@@ -83,6 +84,7 @@ class AdminController extends Controller
 					$op = new Operateur ();
 					$op->country_id = (isset($contact ["contact"]["indicatif"]["country"]["id"])) ? $contact ["contact"]["indicatif"]["country"]["id"] : 1;
 					$op->code = $operateur;
+					$op->name = '';
 					$op->save ();
 				}
 
@@ -101,7 +103,7 @@ class AdminController extends Controller
 					
 					if(!$join_id) {
 						$joinable->contacts ()->create ( [
-								"type" => "bureau",
+						        "type" => isset($contact["type"]) ? $contact["type"] : "bureau",
 								"ry_profile_contact_type" => Phone::class,
 								"ry_profile_contact_id" => $phone->id
 						] );
@@ -110,7 +112,7 @@ class AdminController extends Controller
 				elseif(!$join_id) {
 					$phone = Phone::where("indicatif_id", "=", $indic->id)->where("operateur_id", "=", $op->id)->where("raw", "=", $raw)->first();
 					$joinable->contacts ()->create ( [
-						"type" => "bureau",
+						"type" => isset($contact["type"]) ? $contact["type"] : "bureau",
 						"ry_profile_contact_type" => Phone::class,
 						"ry_profile_contact_id" => $phone->id
 					] );
@@ -132,7 +134,7 @@ class AdminController extends Controller
 						->where("ry_profile_contact_id", "=", $email->id)->exists()) {
 					if(!$join_id) {
 						$joinable->contacts ()->create ( [
-							"type" => "bureau",
+						    "type" => isset($contact["type"]) ? $contact["type"] : "bureau",
 							"ry_profile_contact_type" => Email::class,
 							"ry_profile_contact_id" => $email->id
 						] );
@@ -141,7 +143,7 @@ class AdminController extends Controller
 						$joint = $joinable->contacts()->where("id", "=", $join_id)->first();
 						if(!$joint) {
 							$joinable->contacts ()->create ( [
-								"type" => "bureau",
+							    "type" => isset($contact["type"]) ? $contact["type"] : "bureau",
 								"ry_profile_contact_type" => Email::class,
 								"ry_profile_contact_id" => $email->id
 							] );
@@ -156,7 +158,7 @@ class AdminController extends Controller
 					$email = $joinable->contacts ()->where("ry_profile_contact_type", "LIKE", "%Email%")
 					->where("ry_profile_contact_id", "=", $email->id)->first();
 					$joinable->contacts ()->create ( [
-						"type" => "bureau",
+					    "type" => isset($contact["type"]) ? $contact["type"] : "bureau",
 						"ry_profile_contact_type" => Email::class,
 						"ry_profile_contact_id" => $email->id
 					] );
