@@ -117,6 +117,10 @@ class AdminController extends Controller
 						"ry_profile_contact_id" => $phone->id
 					] );
 				}
+				else {
+				    $phone->raw = $raw;
+				    $phone->save();
+				}
 			}
 					
 			if ($contact ["contact_type"] == "email") {
