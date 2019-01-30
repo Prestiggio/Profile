@@ -9,6 +9,7 @@ use Ry\Profile\Models\Phone;
 use Ry\Profile\Models\Indicatif;
 use Ry\Profile\Models\Operateur;
 use Ry\Profile\Models\Contact;
+use Ry\Profile\Models\Fax;
 
 class AdminController extends Controller
 {
@@ -58,14 +59,14 @@ class AdminController extends Controller
 					}
 				}
 				else {					
-					$raw = preg_replace("/^0*261/i", "0", $raw);
+					$raw = preg_replace("/^0*33/i", "0", $raw);
 					if(strlen($raw)<7) {
 						continue;
 					}
 					
 					$indicatif = substr ( $raw, 0, - 9 );
 					if ($indicatif == "0")
-						$indicatif = "261";
+						$indicatif = "33";
 					
 					$indic = Indicatif::where ( "code", "=", $indicatif )->first ();
 					if (! $indic) {
@@ -123,7 +124,7 @@ class AdminController extends Controller
 				}
 			}
 					
-			if ($contact ["contact_type"] == "email") {
+			elseif ($contact ["contact_type"] == "email") {
 				if(!isset($contact ["coord"]))
 					continue;
 				
@@ -167,6 +168,86 @@ class AdminController extends Controller
 						"ry_profile_contact_id" => $email->id
 					] );
 				}
+			}
+			
+			elseif ($contact ["contact_type"] == "fax") {
+			    if(!isset($contact ["coord"]))
+			        continue;
+			        
+			        $raw = preg_replace ( "/[^\d]+/i", "", $contact ["coord"] );
+			        if(strlen($raw)<7) {
+			            continue;
+			        }
+			        if(isset($contact ["contact"]["indicatif"]["id"])) {
+			            $indic = Indicatif::where( "id", "=", $contact ["contact"]["indicatif"]["id"] )->first ();
+			            if (! $indic) {
+			                continue;
+			            }
+			        }
+			        else {
+			            $raw = preg_replace("/^0*33/i", "0", $raw);
+			            if(strlen($raw)<7) {
+			                continue;
+			            }
+			            
+			            $indicatif = substr ( $raw, 0, - 9 );
+			            if ($indicatif == "0")
+			                $indicatif = "33";
+			                
+			                $indic = Indicatif::where ( "code", "=", $indicatif )->first ();
+			                if (! $indic) {
+			                    $indic = new Indicatif ();
+			                    $indic->country_id = (isset($contact ["contact"]["indicatif"]["country"]["id"])) ? $contact ["contact"]["indicatif"]["country"]["id"] : 1;
+			                    $indic->code = $indicatif;
+			                    $indic->format = "\d{10}";
+			                    $indic->save ();
+			                }
+			        }
+			        
+			        $operateur = substr ( $raw, - 9, - 7 );
+			        
+			        $op = Operateur::where ( "code", "=", $operateur )->first ();
+			        if (! $op) {
+			            $op = new Operateur ();
+			            $op->country_id = (isset($contact ["contact"]["indicatif"]["country"]["id"])) ? $contact ["contact"]["indicatif"]["country"]["id"] : 1;
+			            $op->code = $operateur;
+			            $op->name = '';
+			            $op->save ();
+			        }
+			        
+			        if(!$join_id) {
+			            $fax = new Fax();
+			        }
+			        else {
+			            $fax = Contact::where("id", "=", $join_id)->first()->ry_profile_contact;
+			        }
+			        
+			        if(!Fax::where("indicatif_id", "=", $indic->id)->where("operateur_id", "=", $op->id)->where("raw", "=", $raw)->exists()) {
+			            $fax->indicatif_id = $indic->id;
+			            $fax->operateur_id = $op->id;
+			            $fax->raw = $raw;
+			            $fax->save ();
+			            
+			            if(!$join_id) {
+			                $joinable->contacts ()->create ( [
+			                    "type" => isset($contact["type"]) ? $contact["type"] : "bureau",
+			                    "ry_profile_contact_type" => Fax::class,
+			                    "ry_profile_contact_id" => $fax->id
+			                ] );
+			            }
+			        }
+			        elseif(!$join_id) {
+			            $fax = Fax::where("indicatif_id", "=", $indic->id)->where("operateur_id", "=", $op->id)->where("raw", "=", $raw)->first();
+			            $joinable->contacts ()->create ( [
+			                "type" => isset($contact["type"]) ? $contact["type"] : "bureau",
+			                "ry_profile_contact_type" => Fax::class,
+			                "ry_profile_contact_id" => $fax->id
+			            ] );
+			        }
+			        else {
+			            $fax->raw = $raw;
+			            $fax->save();
+			        }
 			}
 
 			Contact::reguard();
