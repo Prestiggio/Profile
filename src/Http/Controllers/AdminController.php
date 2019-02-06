@@ -19,6 +19,9 @@ class AdminController extends Controller
 	
 	public function putContacts(&$joinable, $ar) {
 		foreach ( $ar as $contact ) {
+		    if(!$contact['coord'])
+		        continue;
+		    
 			$join_id = false;
 			if(isset($contact["id"]) && $contact["id"]>0)
 				$join_id = $contact["id"];
@@ -67,6 +70,8 @@ class AdminController extends Controller
 					$indicatif = substr ( $raw, 0, - 9 );
 					if ($indicatif == "0")
 						$indicatif = "33";
+					else
+					    $indicatif = substr ( $raw, 0, 3 );
 					
 					$indic = Indicatif::where ( "code", "=", $indicatif )->first ();
 					if (! $indic) {
