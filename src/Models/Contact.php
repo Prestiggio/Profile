@@ -8,9 +8,9 @@ class Contact extends Model
 {
 	protected $table = "ry_profile_contacts";
 	
-	protected $visible = ["id", "type", "contact_type", "coord", "contact"];
+	protected $visible = ["id", "ndetail"];
 	
-	protected $appends = ["coord", "contact_type", "contact"];
+	protected $appends = ["ndetail"];
 	
     public function ry_profile_contact() {
 		return $this->morphTo();
@@ -18,6 +18,14 @@ class Contact extends Model
 	
 	public function schedule() {
 		return $this->hasOne("Ry\Profile\Models\ContactSchedule", "contact_id");
+	}
+	
+	public function getDetailsAttribute() {
+    	return [
+    	        "type" => $this->contact_type,
+    	        "value" => $this->contact->raw,
+    	        "schedule" => $this->type
+    	    ];
 	}
 	
 	public function getCoordAttribute() {
@@ -30,6 +38,9 @@ class Contact extends Model
 			
 			if ($this->ry_profile_contact_type == Phone::class)
 				return $this->ry_profile_contact->raw;
+			
+			if($this->ry_profile_contact_type == Fax::class)
+			    return $this->ry_profile_contact->raw;
 		}
 		
 		return "undefined";
@@ -49,12 +60,23 @@ class Contact extends Model
 		if ($this->ry_profile_contact_type == Phone::class)
 			return "phone";
 		
+		if ($this->ry_profile_contact_type == Fax::class)
+		    return "fax";
+		
 		return "";
 	}
 	
 	public function getContactAttribute() {
 		if($this->contact_type=="phone")
-			return $this->ry_profile_contact()->with("indicatif.country")->first();
+			return $this->ry_profile_contact()->first();
 		return $this->ry_profile_contact;
+	}
+	
+	public function getNdetailAttribute() {
+	    return json_decode($this->detail, true);
+	}
+	
+	public function setNdetailAttribute($contact) {
+	    $this->detail = $contact;
 	}
 }

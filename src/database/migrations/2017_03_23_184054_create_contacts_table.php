@@ -15,9 +15,8 @@ class CreateContactsTable extends Migration
         Schema::create('ry_profile_contacts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer("user_id", false, true);
-            $table->char("type")->nullable(); //domicile, bureau...
-            $table->char("ry_profile_contact_type");
-            $table->integer("ry_profile_contact_id", false, true);
+            $table->json("detail");
+            $table->morphs("joinable");
             $table->timestamps();
         });
     }
