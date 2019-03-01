@@ -12,6 +12,16 @@ class AdminController extends Controller
 		$this->middleware("auth");
 	}
 	
+	public function get_migration2019() {
+	    $contacts = Contact::all();
+	    foreach($contacts as $contact) {
+	        if($contact->contact) {
+	            $contact->detail = json_encode($contact->details);
+	            $contact->save();
+	        }
+	    }
+	}
+	
 	public function putContacts(&$joinable, $ar) {
 		foreach ( $ar as $contact ) {
 		    if(!$contact['coord'])
