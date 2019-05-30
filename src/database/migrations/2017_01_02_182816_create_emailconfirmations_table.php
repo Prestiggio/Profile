@@ -15,7 +15,7 @@ class CreateEmailconfirmationsTable extends Migration {
 		Schema::create('ry_profile_emailconfirmations', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer("user_id", false, true)->nullable();
+			$table->unsignedBigInteger("user_id")->nullable();
 			$table->char("email");
 			$table->char("hash");
 			$table->boolean("valide");

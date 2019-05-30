@@ -14,14 +14,12 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('ry_profile_notifications', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer("user_id", false, true);
+            $table->unsignedBigInteger("user_id");
             $table->text("presentation");
             $table->integer("priority")->default(0);
             $table->boolean("seen");
             $table->timestamps();
             $table->softDeletes();
-            
-            $table->foreign("user_id")->references("id")->on("users")->onDelete("cascade");
         });
     }
 

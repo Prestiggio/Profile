@@ -15,7 +15,7 @@ class Profile extends Migration {
 		Schema::create('ry_profile_profiles', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->integer("user_id", false, true);
+			$table->unsignedBigInteger("user_id");
 			$table->char("pseudo")->nullable();
 			$table->char("firstname")->nullable();
 			$table->char("middlename")->nullable();
