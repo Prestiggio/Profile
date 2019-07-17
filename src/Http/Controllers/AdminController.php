@@ -23,20 +23,20 @@ class AdminController extends Controller
 	}
 	
 	public function putContacts(&$joinable, $ar) {
-		foreach ( $ar as $contact ) {
-		    if(!$contact['coord'])
+		foreach ( $ar as $schedule => $contact ) {
+		    if(!$contact["ndetail"]["value"])
 		        continue;
 		    
 	        $_contact = [
-	            "value" => $contact["coord"],
-	            "schedule" => isset($contact["type"]) ? $contact["type"] : "bureau"
+	            "value" => $contact["ndetail"]["value"],
+	            "schedule" => isset($contact["type"]) ? $contact["type"] : $schedule
 	        ];
 		    
 			$join_id = false;
 			if(isset($contact["id"]) && $contact["id"]>0)
 				$join_id = $contact["id"];
 
-			if($join_id && isset($contact["coord"]) && strlen($contact["coord"])==0)
+			if($join_id && isset($contact["ndetail"]["value"]) && strlen($contact["ndetail"]["value"])==0)
 				$contact["deleted"] = true;
 
 			if($join_id && isset($contact["deleted"])) {
@@ -45,7 +45,7 @@ class AdminController extends Controller
 			}
 			
 			if(!isset($contact ["contact_type"])) {
-			    $_contact["type"] = "phone";
+			    $contact["contact_type"] = "phone";
 			}
 			$_contact["type"] = $contact["contact_type"];
 

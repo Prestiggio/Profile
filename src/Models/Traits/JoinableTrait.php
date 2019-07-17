@@ -33,4 +33,14 @@ trait JoinableTrait
 	public function isJoinable() {
 		return $this->contacts->count() > 0;
 	}
+	
+	protected function getArrayableRelations() {
+	    $ar = $this->getArrayableItems($this->relations);
+	    if(isset($ar['contacts'])) {
+	        $ar['contacts'] = $ar['contacts']->keyBy(function($item){
+	            return $item['ndetail']['schedule'];
+	        });
+	    }
+	    return $ar;
+	}
 }
