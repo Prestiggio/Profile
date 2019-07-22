@@ -33,7 +33,8 @@ class AdminController extends Controller
 	        ];
 		    
 			$join_id = false;
-			if(isset($contact["id"]) && $contact["id"]>0)
+			//ra nouveau le joinable tokn ts considerena ny updaten par contact_id fa manao nouveau contact
+			if(isset($contact["id"]) && $contact["id"]>0 && $joinable->contacts()->where("id", "=", $contact["id"])->exists())
 				$join_id = $contact["id"];
 
 			if($join_id && isset($contact["ndetail"]["value"]) && strlen($contact["ndetail"]["value"])==0)
