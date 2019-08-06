@@ -15,11 +15,10 @@ class CreateNotificationsTable extends Migration
         Schema::create('ry_profile_notifications', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedBigInteger("user_id");
-            $table->text("presentation");
+            $table->json("setup");
             $table->integer("priority")->default(0);
-            $table->boolean("seen");
+            $table->timestamp("seen_at")->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

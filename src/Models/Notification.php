@@ -3,20 +3,18 @@
 namespace Ry\Profile\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Carbon\Carbon;
+use Ry\Admin\Models\Traits\HasJsonSetup;
 
 class Notification extends Model
 {
-	use SoftDeletes;
+	use HasJsonSetup;
 	
     protected $table = "ry_profile_notifications";
     
-    protected $dates = ['deleted_at', 'created_at'];
+    protected $appends = ['nsetup'];
     
-    public function object() {
-    	return  $this->morphTo();
-    }
+    protected $hidden = ['setup'];
 
     public function getAgoAttribute() {
         Carbon::setLocale("fr");
@@ -24,6 +22,6 @@ class Notification extends Model
     }
 
     public function scopeUnseen($query) {
-        $query->where("seen", "=", 0); 
+        $query->whereNull("seen_at"); 
     }
 }
