@@ -17,4 +17,8 @@ class Profile extends Model {
 		return $this->belongsTo("App\User", "user_id");
 	}
 	
+	public function getGenderLabelAttribute() {
+	    return __($this->gender);
+	}
+	
 }
