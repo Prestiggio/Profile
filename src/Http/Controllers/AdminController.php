@@ -2,7 +2,10 @@
 namespace Ry\Profile\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\App;
+use Ry\Admin\Models\Permission;
 use Ry\Profile\Models\Indicatif;
+use Ry\Profile\Models\NotificationTemplate;
 use Ry\Profile\Models\Operateur;
 use Ry\Profile\Models\Contact;
 
@@ -20,6 +23,36 @@ class AdminController extends Controller
 	            $contact->save();
 	        }
 	    }
+	}
+	
+	public function templates() {
+	    $permission = Permission::authorize(__METHOD__);
+	    $templates = NotificationTemplate::all();
+	    $templates->each(function($item){
+	        $locale = $item->medias()->where('title', '=', App::getLocale());
+	        if($locale->exists()) {
+	            $row = $locale->first();
+	        }
+	        else {
+	            $row = $item->medias()->first();
+	        }
+	        $data = json_decode($row->descriptif, true);
+	        $item->setAttribute('title', $item->name);
+	        $item->setAttribute('subject', isset($data['subject'])?$data['subject']:$item->name);
+	        $item->makeVisible(['title', 'subject']);
+	    });
+        return view("ryprofile::ldjson", [
+            "view" => "Ry.Profile.Contact",
+            "data" => [
+                "data" => $templates
+            ],
+            "page" => [
+                "title" => __("e_mail"),
+                'href' => __('get_templates'),
+                'icon' => 'fa fa-users',
+                'permission' => $permission
+            ]
+        ]);
 	}
 	
 	public function putContacts(&$joinable, $ar) {
