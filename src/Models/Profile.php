@@ -2,16 +2,19 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Ry\Geo\Models\Traits\Geoable;
+use Ry\Admin\Models\Traits\HasJsonSetup;
 
 class Profile extends Model {
 
-	use Geoable;
+	use Geoable, HasJsonSetup;
 	
 	protected $table = "ry_profile_profiles";
 	
 	//protected $with = ["adresse"];
 	
-	protected $fillable = ["gender", "firstname", "lastname", "official", "languages", "adresse_id"];
+	protected $fillable = ["gender", "firstname", "lastname", "official", "languages", "adresse_id", "setup"];
+	
+	protected $appends = ['nsetup'];
 	
 	public function owner() {
 		return $this->belongsTo("App\User", "user_id");

@@ -27,6 +27,7 @@ class Profile extends Migration {
 			$table->date("birthday")->nullable();
 			$table->integer("adresse_id", false, true)->nullable();
 			$table->char("languages");
+			$table->json('setup')->nullable();
 			$table->timestamps();
 		});
 	}
