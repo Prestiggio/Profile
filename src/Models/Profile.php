@@ -14,7 +14,7 @@ class Profile extends Model {
 	
 	protected $fillable = ["gender", "firstname", "lastname", "official", "languages", "adresse_id", "setup"];
 	
-	protected $appends = ['nsetup'];
+	protected $appends = ['nsetup', 'gender_label'];
 	
 	public function owner() {
 		return $this->belongsTo("App\User", "user_id");
