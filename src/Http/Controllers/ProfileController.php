@@ -91,4 +91,10 @@ class ProfileController extends Controller
 		]));
 		Notification::reguard();
 	}
+	
+	public function createNotification($ar) {
+	    Notification::unguard();
+	    Notification::create($ar);
+	    Notification::reguard();
+	}
 }
