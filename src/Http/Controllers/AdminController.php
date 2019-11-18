@@ -47,8 +47,8 @@ class AdminController extends Controller
                 "data" => $templates
             ],
             "page" => [
-                "title" => __("e_mail"),
-                'href' => __('get_templates'),
+                "title" => __("E-mail"),
+                'href' => __('/templates'),
                 'icon' => 'fa fa-users',
                 'permission' => $permission
             ]
