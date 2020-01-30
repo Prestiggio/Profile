@@ -19,6 +19,7 @@ class CreateEmailconfirmationsTable extends Migration {
 			$table->char("email");
 			$table->char("hash");
 			$table->boolean("valide");
+			$table->json("setup")->nullable();
 			$table->timestamps();
 		});
 	}
