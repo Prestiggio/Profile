@@ -17,6 +17,7 @@ class CreateNotificationsTable extends Migration
             $table->unsignedBigInteger("user_id");
             $table->json("setup");
             $table->integer("priority")->default(0);
+            $table->timestamp('expire_at')->nullable();
             $table->timestamp("seen_at")->nullable();
             $table->timestamps();
         });
