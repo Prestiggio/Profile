@@ -8,10 +8,11 @@ use Ry\Admin\Listeners\MailSender;
 use Ry\Admin\Listeners\SmsSender;
 use Ry\Admin\Listeners\MessengerSender;
 use Ry\Admin\Models\Alert;
+use Ry\Admin\Models\Traits\HasJsonSetup;
 
 class NotificationTemplate extends Model
 {
-    use MediableTrait;
+    use MediableTrait, HasJsonSetup;
     
     const CHANNELS = [
         MailSender::class => 'e_mail',
