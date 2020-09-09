@@ -24,8 +24,13 @@ trait JoinableTrait
 	
 	public function getCompleteContactsAttribute() {
 		$s = [];
+		$type_labels = [
+		    "phone" => __("Tél"),
+		    "fax" => __("Fax"),
+		    "email" => __("Email")
+		];
 		foreach ($this->contacts as $contact) {
-			$s[] = $contact->ry_profile_contact;
+			$s[] = $type_labels[$contact->ndetail['type']] . ': ' . $contact->ndetail['value'];
 		}
 		return implode("<br/>", $s);
 	}
