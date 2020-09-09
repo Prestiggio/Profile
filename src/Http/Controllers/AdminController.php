@@ -41,14 +41,14 @@ class AdminController extends Controller
 	        $item->setAttribute('subject', isset($data['subject'])?$data['subject']:$item->name);
 	        $item->makeVisible(['title', 'subject']);
 	    });
-        return view("ryprofile::ldjson", [
+        return view("ldjson", [
             "view" => "Ry.Profile.Contact",
             "data" => [
                 "data" => $templates
             ],
             "page" => [
-                "title" => __("e_mail"),
-                'href' => __('get_templates'),
+                "title" => __("E-mail"),
+                'href' => __('/templates'),
                 'icon' => 'fa fa-users',
                 'permission' => $permission
             ]

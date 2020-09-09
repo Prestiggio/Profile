@@ -22,6 +22,11 @@ class Notification extends Model
     }
 
     public function scopeUnseen($query) {
-        $query->whereNull("seen_at"); 
+        $query->whereNull("seen_at")->where(function($q){
+            $q->orWhereNull("expire_at");
+            $q->orWhere(function($q){
+                $q->where('expire_at', '>=', Carbon::now())->whereNotNull('expire_at');
+            });
+        }); 
     }
 }
