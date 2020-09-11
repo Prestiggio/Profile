@@ -43,7 +43,7 @@ trait JoinableTrait
 	    $ar = $this->getArrayableItems($this->relations);
 	    if(isset($ar['contacts'])) {
 	        $ar['contacts'] = $ar['contacts']->keyBy(function($item){
-	            return $item['ndetail']['schedule'];
+	            return $item['ndetail']['schedule'].'_'.$item['ndetail']['type'];
 	        });
 	    }
 	    return $ar;
