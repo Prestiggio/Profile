@@ -57,8 +57,14 @@ class AdminController extends Controller
 	
 	public function putContacts(&$joinable, $ar) {
 		foreach ( $ar as $schedule => $contact ) {
-		    if(!$contact["ndetail"]["value"])
-		        continue;
+		    if(!$contact["ndetail"]["value"]) {
+		        if(isset($contact['id']) && $contact['id']>0) {
+		            $contact["ndetail"]["value"] = "";
+		        }
+		        else {
+		            continue;
+		        }
+		    }
 		    
 	        $_contact = [
 	            "value" => $contact["ndetail"]["value"],
