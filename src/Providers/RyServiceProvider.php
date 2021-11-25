@@ -45,13 +45,6 @@ class RyServiceProvider extends ServiceProvider
     	$this->map();
     	//$kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
     	//$kernel->pushMiddleware('Ry\Facebook\Http\Middleware\Facebook');
-    	
-    	$use_trait = array_has(class_uses(User::class), "Ry\Profile\Models\Traits\Emailconfirmable");
-    	if($use_trait) {
-    		User::saved(function($user){
-    			$user->isEmailConfirmed();
-    		});
-		}
     }
 
     /**
