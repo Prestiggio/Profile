@@ -14,17 +14,7 @@
         }
     },
     "require": {
-    	"ry/medias":"dev-prefixed",
-        "ry/geo":"dev-prefixed"
-    },
-    "repositories": [
-	    {
-	        "type": "vcs",
-	        "url": "git@topmora.com:/opt/git/modules/ry/medias.git"
-	    },
-        {
-          "type": "vcs",
-          "url": "git@topmora.com:/opt/git/modules/ry/geo.git"
-        }
-	]
+    	"prestiggio/medias":"dev-prefixed",
+        "prestiggio/geo":"dev-prefixed"
+    }
 }
