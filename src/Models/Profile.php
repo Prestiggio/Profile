@@ -1,5 +1,6 @@
 <?php namespace Ry\Profile\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Ry\Geo\Models\Traits\Geoable;
 use Ry\Admin\Models\Traits\HasJsonSetup;
@@ -17,7 +18,7 @@ class Profile extends Model {
 	protected $appends = ['nsetup', 'gender_label'];
 	
 	public function owner() {
-		return $this->belongsTo("App\User", "user_id");
+		return $this->belongsTo(User::class, "user_id");
 	}
 	
 	public function getGenderLabelAttribute() {
